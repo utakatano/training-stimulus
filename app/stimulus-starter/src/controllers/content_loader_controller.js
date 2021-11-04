@@ -11,14 +11,24 @@ export default class extends Controller {
     }
   }
 
+  disconnect() {
+    this.stopRefreshing()
+  }
+
   startRefreshing() {
-    setInterval(() => {
+    this.refreshTimer = setInterval(() => {
       this.load()
     }, this.refleshIntervalValue)
   }
 
-  load() {
-    fetch(this.urlValue)
+  stopRefreshing() {
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer)
+    }
+  }
+
+  load({ params }) {
+    fetch(params.url)
       .then(response => response.text())
       .then(html => this.element.innerHTML = html)
   }
